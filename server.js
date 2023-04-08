@@ -10,7 +10,7 @@ const cors = require("cors");
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
-app.use(cors({origin: "*"}))
+app.use(cors())
 
 dbName = 'ismDB';
 
