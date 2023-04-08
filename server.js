@@ -137,16 +137,21 @@ app.get("/getClubs", (req,res)=>
   
 })
 
+
 // get Club Details by id
 app.get("/getClubDetails/:id",(req,res)=>{
   const {id} = req.params;
   
     Club.find({_id:id})
     .then((clubs)=>{
-      res.send(clubs[0])
+      let clubsJson = clubs[0].toJSON()
+      for (let i=0; i<clubsJson.inductionProcess.length; i++) {
+        clubsJson.inductionProcess[i].date = clubs[0].inductionProcess[i].date.toISOString().slice(0,10);
+      }
+      res.send(clubsJson);
      })  
      .catch((err)=>{
-    console.log(err)
+    console.log(err);
      })
 })
 
