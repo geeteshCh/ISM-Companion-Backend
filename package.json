@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "mongoose": "^7.0.3"
+  },
+  "name": "ism-companion-backend",
+  "description": "",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/geeteshCh/ISM-Companion-Backend.git"
+  },
+  "author": "Geetesh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/geeteshCh/ISM-Companion-Backend/issues"
+  },
+  "homepage": "https://github.com/geeteshCh/ISM-Companion-Backend#readme"
+}
