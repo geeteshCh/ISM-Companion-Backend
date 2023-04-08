@@ -119,11 +119,18 @@ app.get("/getClubDetails/:id",(req,res)=>{
      })
 })
 
-// app.put("/editClubDetails/:id",(req,res)=>{
-//   //const {id} = req.params;
-//   data = req.body;
-//   console.log(data)
-// })
+app.put("/editClubDetails/:id",(req,res)=>{
+  //const {id} = req.params;
+  data = req.body;
+  //console.log(data)
+
+
+console.log(req.body.name)
+  Club.replaceOne({_id:data._id},req.body)
+  .catch((err)=>{
+   console.log(err)
+  })
+})
 
 
 port = process.env.PORT || 5000;
