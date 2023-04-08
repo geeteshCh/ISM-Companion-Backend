@@ -51,7 +51,8 @@ const clubSchema=new mongoose.Schema({
   members: [{
       name : String,
       designation : String,
-      contact : String
+      contact : String,
+      memURL: String
   }]
 
 });
@@ -127,6 +128,9 @@ app.put("/editClubDetails/:id",(req,res)=>{
 
 console.log(req.body.name)
   Club.replaceOne({_id:data._id},req.body)
+  .then((response)=>{
+    console.log(response)
+  })
   .catch((err)=>{
    console.log(err)
   })
