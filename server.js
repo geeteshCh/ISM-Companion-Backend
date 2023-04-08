@@ -21,6 +21,16 @@ dbName = 'ismDB';
 // mongoose.connect(process.env.MONGODB_ATLAS_URL+dbName);
 mongoose.connect("mongodb+srv://geeteshCh:chr0nometer@giantbear.zhoxbpj.mongodb.net/"+dbName);
 
+const memberSchema = new mongoose.Schema({
+  email : 
+  {
+    type : String,
+    required : true
+  },
+  name : String,
+});
+const  User = mongoose.model("User",memberSchema); // admin 
+
 const clubSchema=new mongoose.Schema({
 
   name: {
@@ -62,15 +72,34 @@ const Club = mongoose.model("club",clubSchema); // club
 // artfreaks = new Club({
 //   name: 'Art Freaks',
 //   tagline: 'The club for all artists',
-//   imgUrl: 'kk'
-
+//   description: `Art is freedom. Being able to bend things most people see as a straight line.OUTSHINE provides everyone a common platform to showcase their artistic side and give wings to their creativity. So get ready to unleash your artistic vision and create an artwork that outshines others.`,
+//   imgUrl: 'https://pbs.twimg.com/media/E6m7GZgXsAMQFxa?format=jpg&name=large',
+//   coordinates: '12.46.0.98.3',
+//   links: {
+//       facebook: 'https://www.facebook.com',
+//       instagram: 'https://www.instagram.com/explore/tags/artfreak/'
+//   },
+//   inductionStatus: false,
+//   inductionProcess: [{stepTitle:'passionate artist',stepDescription:'Should Provide 3 best arts',date:'2023-04-09',time:'6:00 PM'}],
+//   office: 'SAC, Room No:107',
+//   members: [{name:'Vishwa', designation:'coordinator', contact:'9277817236'},{name:'Geetesh', designation:'member', contact:'9347817236'}]
+  
 // });
 
 // roboism = new Club({
 //   name: 'Robo Ism',
 //   tagline: 'The robotics club ISM',
-//   imgUrl: 'kko'
-
+//   description: `Robotics & AI Club is a student-run organization/club of Indian Institute of Technology (ISM) Dhanbad. The Robotics Club is a community of students who derive pleasure in creating mechanical peers that may even be potent to work without human intervention.`,
+//   imgUrl: 'https://www.analyticsinsight.net/wp-content/uploads/2021/12/The-Future-of-Robotics-Its-Implications-in-2021-and-Beyond.jpg',
+//   coordinates: '12.46.0.98.3',
+//   links: {
+//       facebook: 'https://www.facebook.com',
+//       instagram: 'https://www.instagram.com/robo__ism/'
+//   },
+//   inductionStatus: false,
+//   inductionProcess: [{stepTitle:'Individual project',stepDescription:'Participants are expected to design a hardware that solve some real world problem',date:'2023-04-09',time:'6:00 PM'}],
+//   office: 'SAC, Room No:307',
+//   members: [{name:'Vishwa', designation:'coordinator', contact:'9277817236'},{name:'Sandeep', designation:'member', contact:'9346914615'}]
 // });
 
 // swimming = new Club({
@@ -120,22 +149,35 @@ app.get("/getClubDetails/:id",(req,res)=>{
      })
 })
 
-app.put("/editClubDetails/:id",(req,res)=>{
-  //const {id} = req.params;
-  data = req.body;
-  //console.log(data)
+// app.put("/editClubDetails/:id",(req,res)=>{
+//   //const {id} = req.params;
+//   data = req.body;
+//   console.log(data)
+// })
 
-
-console.log(req.body.name)
-  Club.replaceOne({_id:data._id},req.body)
-  .then((response)=>{
-    console.log(response)
+// handle post request to delete an item to the list.
+app.post("/addClub",function(req,res)
+{
+    const  clubName=req.body.name;
+    const newEmail=req.body.email;
+    newClub = new Club({
+      name : clubName
+    })
+    newClub.save();
+    User.find({email : newEmail}).then((foundUser) =>{
+      console.log(foundUser);
+       if(foundUser.length == 0)
+        {
+            const newUser=new User({
+                email : newEmail,
+            })
+            newUser.save();
+        }
+    })
+    .catch((err)=>{
+      console.log(err)
+       })
   })
-  .catch((err)=>{
-   console.log(err)
-  })
-})
-
 
 port = process.env.PORT || 5000;
 app.listen(port, function() {
