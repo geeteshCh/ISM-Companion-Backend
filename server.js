@@ -262,11 +262,14 @@ app.get("/getClubEvents/:id", (req,res)=>
   const id=req.params.id;
   Event.find({club : id}).select(['name','tagline','date','time','club'])
  .then((eventts)=>{
-  // let eventsJson = eventTs.toJSON();
-  // for(i=0;i<eventsJson.length;i++){
-  //   eventsJson[i].date = eventTs[i].date.toISOString().slice(0,10);
-  // }
-  res.status(200).send(eventts)
+  let eventsJson = [];
+  for(let i=0;i<eventts.length;i++){
+    eventsJson.push(eventts[i].toJSON())
+  }
+  for(let i=0;i<eventsJson.length;i++){
+    eventsJson[i].date = eventts[i].date.toISOString().slice(0,10);
+  }
+  res.status(200).send(eventsJson)
  })
  .catch((err)=>{
   console.log(err)
