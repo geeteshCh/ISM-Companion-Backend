@@ -15,7 +15,7 @@ dbName = 'ismDB';
 mongoose.connect("mongodb+srv://geeteshCh:chr0nometer@giantbear.zhoxbpj.mongodb.net/"+dbName);
 
 // Member Schema
-const memberSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   email : 
   {
     type : String,
@@ -24,7 +24,7 @@ const memberSchema = new mongoose.Schema({
   name : String,
   clubIds: [String]
 });
-const  User = mongoose.model("User",memberSchema); // admin 
+const  User = mongoose.model("User",userSchema); // admin 
 
 // Club Schema 
 const clubSchema=new mongoose.Schema({
@@ -99,7 +99,7 @@ app.get("/getClubDetails/:id",(req,res)=>{
 })
 
 
-// handle post request to add a new club
+// add a club
 app.post("/addClub",function(req,res)
 {
     const  clubName=req.body.name;
@@ -138,8 +138,8 @@ app.post("/addClub",function(req,res)
     .catch((err)=>{
       console.log(err)
       res.status(500).send()
-       })
   })
+})
 
   // Edit Club Details 
   app.put("/editClubDetails/:id",(req,res)=>{
@@ -193,6 +193,8 @@ const eventSchema=new mongoose.Schema({
 });
 const Event = mongoose.model("Event",eventSchema); // Event Collection
 
+//EVENT ROUTES ---------------------------------------------------------------------------------------------------------
+
 // get All Events 
 app.get("/getEvents", (req,res)=>
 {
@@ -229,7 +231,7 @@ app.get("/getEventDetails/:id",(req,res)=>{
     
 })
 
-// Post Requests to add a new event
+// add a new event
 app.post('/addEvent',(req,res)=>{
   Event.insertMany([req.body])
   .then(()=>{
@@ -241,7 +243,7 @@ app.post('/addEvent',(req,res)=>{
   })
 })
 
-// Requests to edit Event Details 
+// edit Event Details 
 app.put('/editEvent/:id',(req,res)=>{
   data = req.body;
   console.log(req.body.name)
@@ -283,3 +285,33 @@ port = process.env.PORT || 5000;
 app.listen(port, function() {
   console.log(`Server started on port ${port}`);
 });
+
+
+// OTHER ROUTES -----------------------------------------------------------------------------------------------------
+
+app.post('/login',(req,res)=>{
+    user = req.body;
+    
+    User.find({email : user.email}).then((foundUser) =>{
+      if(foundUser.length == 0){
+        const newUser=new User({
+            email : user.email,
+            name: user.name
+        })
+        newUser.save();
+        res.status(200).send('new user added')
+      }else{
+        if(!foundUser[0].name){
+          User.updateOne({_id: foundUser[0]._id},{name: user.name}).then(()=>{res.status(200).send('User name updated')})
+          .catch((err)=>{console.log(err); res.status(500).send('Unable to update user name')})
+        }else{
+          res.status(200).send('existing user logged in')
+        }
+       }
+    })
+      .catch((err)=>{
+            console.log(err);
+            res.status(500).send('unable to find user')
+      })
+        
+})
