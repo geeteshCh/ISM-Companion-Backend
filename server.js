@@ -2,7 +2,8 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+//const dotenv = require("dotenv")
 const app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -13,7 +14,9 @@ dbName = 'ismDB';
 
 //mongoose.connect("mongodb://localhost:27017/" + dbName);
 
-mongoose.connect('mongodb+srv://geeteshCh:chr0nometer@giantbear.zhoxbpj.mongodb.net/'+dbName)
+//mongoose.connect(`mongodb+srv://${process.env.MONGODB_ATLAS_USERNAME}:${process.env.MONGODB_ATLAS_PASSWORD}@giantbear.zhoxbpj.mongodb.net/`+dbName)
+// mongoose.connect(process.env.MONGODB_ATLAS_URL+dbName);
+mongoose.connect("mongodb+srv://geeteshCh:chr0nometer@giantbear.zhoxbpj.mongodb.net/"+dbName);
 
 const clubSchema=new mongoose.Schema({
 
