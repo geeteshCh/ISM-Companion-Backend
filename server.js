@@ -172,6 +172,7 @@ const eventSchema=new mongoose.Schema({
   },
   tagline : String,
   description: String,
+  clubName : String,
   club : String,
   date : Date,
   time : String,
@@ -196,7 +197,7 @@ const Event = mongoose.model("Event",eventSchema); // Event Collection
 // get All Events 
 app.get("/getEvents", (req,res)=>
 {
-  Event.find().select(['name','tagline','venue','coordinates','date','time','club'])
+  Event.find().select(['name','tagline','venue','coordinates','date','time','club','clubName'])
  .then((eventts)=>{
   let eventsJson = [];
   for(let i=0;i<eventts.length;i++){
