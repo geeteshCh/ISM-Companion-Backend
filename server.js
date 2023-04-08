@@ -10,7 +10,7 @@ const cors = require("cors");
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
-app.use(cors({origin: "*"}))
+app.use(cors())
 
 dbName = 'ismDB';
 
@@ -28,6 +28,7 @@ const memberSchema = new mongoose.Schema({
     required : true
   },
   name : String,
+  clubIds: [String]
 });
 const  User = mongoose.model("User",memberSchema); // admin 
 
@@ -61,7 +62,8 @@ const clubSchema=new mongoose.Schema({
   members: [{
       name : String,
       designation : String,
-      contact : String
+      contact : String,
+      memURL: String
   }]
 
 });
@@ -134,16 +136,23 @@ app.get("/getClubs", (req,res)=>
  })  
 })
 
+
 // get Club Details by id
 app.get("/getClubDetails/:id",(req,res)=>{
   const {id} = req.params;
   
     Club.find({_id:id})
     .then((clubs)=>{
-      res.send(clubs[0])
+      let clubsJson = clubs[0].toJSON()
+      for (let i=0; i<clubsJson.inductionProcess.length; i++) {
+        clubsJson.inductionProcess[i].date = clubs[0].inductionProcess[i].date.toISOString().slice(0,10);
+        // clubsJson.inductionProcess[i].date =clubs[0].inductionProcess[i].date.toISOString().slice(0,4)+ '/'+clubs[0].inductionProcess[i].date.toISOString().slice(5,7)+'/'+clubs[0].inductionProcess[i].date.toISOString().slice(8,10);
+
+      }
+      res.send(clubsJson);
      })  
      .catch((err)=>{
-    console.log(err)
+    console.log(err);
      })
 })
 
@@ -157,14 +166,26 @@ app.post("/addClub",function(req,res)
       name : clubName
     })
     newClub.save();
+    
     User.find({email : newEmail}).then((foundUser) =>{
       console.log(foundUser);
+
        if(foundUser.length == 0)
         {
+          const clubsArr = [];
+          clubsArr.push(newClub._id)
             const newUser=new User({
                 email : newEmail,
+                clubIds: clubsArr
             })
             newUser.save();
+        }else{
+          const clubsArr = foundUser[0].clubIds;
+          clubsArr.push(newClub._id)
+          User.updateOne({_id: foundUser[0]._id},{clubIds: clubsArr})
+          .catch((err)=>{
+            console.log(err);
+          })
         }
     })
     .catch((err)=>{
