@@ -221,8 +221,6 @@ app.post("/addClub",function(req,res)
      console.log(err)
      res.status(500).json({msg:"server error"})
     })
-    
-    
   })
 
 
@@ -294,11 +292,14 @@ app.get("/getEvents", (req,res)=>
 {
   Event.find().select(['name','tagline','venue','coordinates','date','time','club'])
  .then((eventts)=>{
-  // let eventsJson = eventTs.toJSON();
-  // for(i=0;i<eventsJson.length;i++){
-  //   eventsJson[i].date = eventTs[i].date.toISOString().slice(0,10);
-  // }
-  res.status(200).send(eventts)
+  let eventsJson = [];
+  for(let i=0;i<eventts.length;i++){
+    eventsJson.push(eventts[i].toJSON())
+  }
+  for(let i=0;i<eventsJson.length;i++){
+    eventsJson[i].date = eventts[i].date.toISOString().slice(0,10);
+  }
+  res.status(200).send(eventsJson)
  })
  .catch((err)=>{
   console.log(err)
@@ -322,6 +323,9 @@ app.get("/getEventDetails/:id",(req,res)=>{
     
 })
 
+// app.post('/addEvent',(req,res)=>{
+//   Event.
+// })
 
 
 
