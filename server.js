@@ -5,9 +5,12 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 //const dotenv = require("dotenv")
 const app = express();
+const cors = require("cors");
+
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
+app.use(cors({origin: "*"}))
 
 dbName = 'ismDB';
 
@@ -105,7 +108,7 @@ app.get("/getClubs", (req,res)=>
 })
 
 app.get("/getClubDetails/:id",(req,res)=>{
-  let {id} = req.params;
+  const {id} = req.params;
   
     Club.find({_id:id})
     .then((clubs)=>{
@@ -116,6 +119,11 @@ app.get("/getClubDetails/:id",(req,res)=>{
      })
 })
 
+// app.put("/editClubDetails/:id",(req,res)=>{
+//   //const {id} = req.params;
+//   data = req.body;
+//   console.log(data)
+// })
 
 
 port = process.env.PORT || 5000;
