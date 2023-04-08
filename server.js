@@ -122,8 +122,8 @@ const Club = mongoose.model("club",clubSchema); // club
 //artfreaks.save();
 //roboism.save();
 //swimming.save()
-//console.log('Document added sucesfully')
 
+// get all club details  
 app.get("/getClubs", (req,res)=>
 {
  Club.find().select(['name','tagline','imgUrl'])
@@ -137,6 +137,7 @@ app.get("/getClubs", (req,res)=>
   
 })
 
+// get Club Details by id
 app.get("/getClubDetails/:id",(req,res)=>{
   const {id} = req.params;
   
@@ -149,13 +150,8 @@ app.get("/getClubDetails/:id",(req,res)=>{
      })
 })
 
-// app.put("/editClubDetails/:id",(req,res)=>{
-//   //const {id} = req.params;
-//   data = req.body;
-//   console.log(data)
-// })
 
-// handle post request to delete an item to the list.
+// handle post request to add a new club
 app.post("/addClub",function(req,res)
 {
     const  clubName=req.body.name;
@@ -177,6 +173,20 @@ app.post("/addClub",function(req,res)
     .catch((err)=>{
       console.log(err)
        })
+  })
+
+  // Edit Club Details 
+  app.put("/editClubDetails/:id",(req,res)=>{
+    //const {id} = req.params;
+    data = req.body;
+    //console.log(data)
+  
+  
+  console.log(req.body.name)
+    Club.replaceOne({_id:data._id},req.body)
+    .catch((err)=>{
+     console.log(err)
+    })
   })
 
 port = process.env.PORT || 5000;
