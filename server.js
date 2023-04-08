@@ -147,6 +147,8 @@ app.get("/getClubDetails/:id",(req,res)=>{
       let clubsJson = clubs[0].toJSON()
       for (let i=0; i<clubsJson.inductionProcess.length; i++) {
         clubsJson.inductionProcess[i].date = clubs[0].inductionProcess[i].date.toISOString().slice(0,10);
+        clubsJson.inductionProcess[i].date =clubs[0].inductionProcess[i].date.toISOString().slice(0,4)+ '/'+clubs[0].inductionProcess[i].date.toISOString().slice(5,7)+'/'+clubs[0].inductionProcess[i].date.toISOString().slice(8,10);
+
       }
       res.send(clubsJson);
      })  
