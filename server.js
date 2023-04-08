@@ -186,9 +186,7 @@ app.post("/addClub",function(req,res)
             res.status(200).send('new user and club created')
         }else{
           const clubsArr = foundUser[0].clubIds;
-          console.log(clubsArr)
           clubsArr.push(newClub._id)
-          console.log(clubsArr)
           User.updateOne({_id: foundUser[0]._id},{clubIds: clubsArr})
           .then(()=>{
           res.status(200).send('user updated and club created')
@@ -323,7 +321,22 @@ app.get("/getEventDetails/:id",(req,res)=>{
 })
 
 
-
+app.get("/getClubEvents/:id", (req,res)=>
+{
+  const id=req.params.id;
+  Event.find({club : id}).select(['name','tagline','date','time','club'])
+ .then((eventts)=>{
+  // let eventsJson = eventTs.toJSON();
+  // for(i=0;i<eventsJson.length;i++){
+  //   eventsJson[i].date = eventTs[i].date.toISOString().slice(0,10);
+  // }
+  res.status(200).send(eventts)
+ })
+ .catch((err)=>{
+  console.log(err)
+  res.status(500).send('server error while retrieving Club events')
+})
+})
 
 
 
