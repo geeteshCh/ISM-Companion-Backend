@@ -239,21 +239,36 @@ const eventSchema=new mongoose.Schema({
 });
 const Event = mongoose.model("Event",eventSchema); // Event Collection
 
-Takshak = new Event({
-    name: 'Takshak',
-    tagline: 'From Thoughts To Reality',
-    description: `From thought to reality... TAKSHAK is a Sanskrit name taken from Hindu Mythology which carries a meaning associated with managing, creating, or maintaining anything.It hence is a fitting name for a robotics fest as all these aspects along with its interdisciplinary nature are what make Robotics one of the most challenging fields of study. TAKSHAK is East India's largest robotics fest organized by Robotronics - The Robotics and Al Club of IIT ISM Dhanbad.`,
-    coordinates: '12.46.0.98.420',
-    club : "64310fcc473b537b4928f28a",
-    date : "2023-04-08",
-    time : "06:00PM",
-    venue : "SAC 1rd Floor",
-    eligibility : "Must be an Undergrad",
-    team: [{name:'Vishwa', designation:'coordinator', email:'manisandeept7@gmail.com',contact : '1234567890',imgUrl: 'https://www.analyticsinsight.net/wp-content/uploads/2021/12/The-Future-of-Robotics-Its-Implications-in-2021-and-Beyond.jpg'},{name:'Geetesh', designation:'member', contact:'9347817236',email :'geetesh@gmail.com',imgUrl : 'https://www.analyticsinsight.net/wp-content/uploads/2021/12/The-Future-of-Robotics-Its-Implications-in-2021-and-Beyond.jpg'}],
-    registeredMembers : [{name : "Mani Sandeep",email : "tmsandy07@gmail.com"}]
-  });
-  //Takshak.save();
+// Takshak = new Event({
+//     name: 'Takshak',
+//     tagline: 'From Thoughts To Reality',
+//     description: `From thought to reality... TAKSHAK is a Sanskrit name taken from Hindu Mythology which carries a meaning associated with managing, creating, or maintaining anything.It hence is a fitting name for a robotics fest as all these aspects along with its interdisciplinary nature are what make Robotics one of the most challenging fields of study. TAKSHAK is East India's largest robotics fest organized by Robotronics - The Robotics and Al Club of IIT ISM Dhanbad.`,
+//     coordinates: '12.46.0.98.420',
+//     club : "64310fcc473b537b4928f28a",
+//     date : "2023-04-08",
+//     time : "06:00PM",
+//     venue : "SAC 1rd Floor",
+//     eligibility : "Must be an Undergrad",
+//     team: [{name:'Vishwa', designation:'coordinator', email:'manisandeept7@gmail.com',contact : '1234567890',imgUrl: 'https://www.analyticsinsight.net/wp-content/uploads/2021/12/The-Future-of-Robotics-Its-Implications-in-2021-and-Beyond.jpg'},{name:'Geetesh', designation:'member', contact:'9347817236',email :'geetesh@gmail.com',imgUrl : 'https://www.analyticsinsight.net/wp-content/uploads/2021/12/The-Future-of-Robotics-Its-Implications-in-2021-and-Beyond.jpg'}],
+//     registeredMembers : [{name : "Mani Sandeep",email : "tmsandy07@gmail.com"}]
+//   });
+//Takshak.save();
   
+// Swimming = new Event({
+//   name: 'swimming Race',
+//   tagline: 'Live to swim.',
+//   description: `swimming, in recreation and sports, the propulsion of the body through water by combined arm and leg motions and the natural flotation of the body. Swimming as an exercise is popular as an all-around body developer and is particularly useful in therapy and as exercise for physically handicapped persons.`,
+//   coordinates: '12.46.0.97.430',
+//   club : "64310f89676038ccc6f28512",
+//   date : "2023-04-01",
+//   time : "02:00PM",
+//   venue : "SAC Swimming Pool",
+//   eligibility : "Must be an Undergrad",
+//   team: [{name:'Mani Sandeep', designation:'coordinator', email:'manisandeept7@gmail.com',contact : '1234567890',imgUrl: 'https://www.analyticsinsight.net/wp-content/uploads/2021/12/The-Future-of-Robotics-Its-Implications-in-2021-and-Beyond.jpg'},{name:'Geetesh', designation:'member', contact:'9347817236',email :'geetesh@gmail.com',imgUrl : 'https://www.analyticsinsight.net/wp-content/uploads/2021/12/The-Future-of-Robotics-Its-Implications-in-2021-and-Beyond.jpg'}],
+//   registeredMembers : [{name : "Priyatam",email : "priyatam@gmail.com"}]
+// });
+// Swimming.save();
+
 // get Club Details by id
 app.get("/getEventDetails/:id",(req,res)=>{
   const {id} = req.params; 
@@ -283,8 +298,6 @@ app.get("/getEvents", (req,res)=>
   console.log(err)
 })
 })
-
-
 
 
 port = process.env.PORT || 5000;
