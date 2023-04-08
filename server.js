@@ -323,9 +323,31 @@ app.get("/getEventDetails/:id",(req,res)=>{
     
 })
 
-// app.post('/addEvent',(req,res)=>{
-//   Event.
-// })
+app.post('/addEvent',(req,res)=>{
+  Event.insertMany([req.body])
+  .then(()=>{
+    res.status(200).send('event added sucessfully');
+  })
+  .catch((err)=>{
+    console.log(err);
+    res.status(500).send('Error while adding an event');
+  })
+})
+
+app.put('/editEvent/:id',(req,res)=>{
+  data = req.body;
+  console.log(req.body.name)
+  Event.replaceOne({_id:data._id},req.body)
+  .then((response)=>{
+    console.log(response);
+    res.status(200).send({msg:"ok"})
+  })
+  .catch((err)=>{
+   console.log(err)
+   res.status(500).json({msg:"server error while editing event"})
+  })
+})
+
 
 
 
