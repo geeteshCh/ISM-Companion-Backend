@@ -200,6 +200,9 @@ app.post("/addClub",function(req,res)
     //console.log(data)
   console.log(req.body.name)
     Club.replaceOne({_id:data._id},req.body)
+    .then((response)=>{
+      console.log(response)
+    })
     .catch((err)=>{
      console.log(err)
     })
