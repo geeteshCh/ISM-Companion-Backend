@@ -148,6 +148,11 @@ app.get("/getClubDetails/:id",(req,res)=>{
      })
 })
 
+// app.put("/editClubDetails/:id",(req,res)=>{
+//   //const {id} = req.params;
+//   data = req.body;
+//   console.log(data)
+// })
 
 // handle post request to delete an item to the list.
 app.post("/addClub",function(req,res)
