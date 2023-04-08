@@ -124,15 +124,19 @@ const Club = mongoose.model("club",clubSchema); // club
 //roboism.save();
 //swimming.save()
 
+
+//CLUB ROUTES ---------------------------------------------------------------------------------------------------------
+
 // get all club details  
 app.get("/getClubs", (req,res)=>
 {
  Club.find().select(['name','tagline','imgUrl'])
  .then((clubs)=>{
-  res.send(clubs)
+  res.status(200).send(clubs)
  })
  .catch((err)=>{
   console.log(err)
+  res.status(500).send('Server Error')
  })  
 })
 
@@ -149,10 +153,11 @@ app.get("/getClubDetails/:id",(req,res)=>{
         // clubsJson.inductionProcess[i].date =clubs[0].inductionProcess[i].date.toISOString().slice(0,4)+ '/'+clubs[0].inductionProcess[i].date.toISOString().slice(5,7)+'/'+clubs[0].inductionProcess[i].date.toISOString().slice(8,10);
 
       }
-      res.send(clubsJson);
+      res.status(200).send(clubsJson);
      })  
      .catch((err)=>{
     console.log(err);
+    res.status(500).send('server error')
      })
 })
 
@@ -168,7 +173,6 @@ app.post("/addClub",function(req,res)
     newClub.save();
     
     User.find({email : newEmail}).then((foundUser) =>{
-      console.log(foundUser);
 
        if(foundUser.length == 0)
         {
@@ -179,17 +183,26 @@ app.post("/addClub",function(req,res)
                 clubIds: clubsArr
             })
             newUser.save();
+            res.status(200).send('new user and club created')
         }else{
           const clubsArr = foundUser[0].clubIds;
+          console.log(clubsArr)
           clubsArr.push(newClub._id)
+          console.log(clubsArr)
           User.updateOne({_id: foundUser[0]._id},{clubIds: clubsArr})
+          .then(()=>{
+          res.status(200).send('user updated and club created')
+          })
           .catch((err)=>{
             console.log(err);
+            res.status(500).send('server error')
           })
         }
+
     })
     .catch((err)=>{
       console.log(err)
+      res.status(500).send()
        })
   })
 
@@ -201,11 +214,15 @@ app.post("/addClub",function(req,res)
   console.log(req.body.name)
     Club.replaceOne({_id:data._id},req.body)
     .then((response)=>{
-      console.log(response)
+      console.log(response);
+      res.status(200).send({msg:"ok"})
     })
     .catch((err)=>{
      console.log(err)
+     res.status(500).json({msg:"server error"})
     })
+    
+    
   })
 
 
@@ -272,20 +289,6 @@ const Event = mongoose.model("Event",eventSchema); // Event Collection
 // });
 // Swimming.save();
 
-// get Club Details by id
-app.get("/getEventDetails/:id",(req,res)=>{
-  const {id} = req.params; 
-    Event.find({_id:id})
-    .then((event)=>{
-      let eventJson = event[0].toJSON();
-      eventJson.date = event[0].date.toISOString().slice(0,10);
-      res.send(eventJson)
-     })  
-     .catch((err)=>{
-    console.log(err)
-     })
-    
-})
 
 app.get("/getEvents", (req,res)=>
 {
@@ -295,12 +298,33 @@ app.get("/getEvents", (req,res)=>
   // for(i=0;i<eventsJson.length;i++){
   //   eventsJson[i].date = eventTs[i].date.toISOString().slice(0,10);
   // }
-  res.send(eventts)
+  res.status(200).send(eventts)
  })
  .catch((err)=>{
   console.log(err)
+  res.status(500).send('server error while retrieving events')
 })
 })
+
+// get Club Details by id
+app.get("/getEventDetails/:id",(req,res)=>{
+  const {id} = req.params; 
+    Event.find({_id:id})
+    .then((event)=>{
+      let eventJson = event[0].toJSON();
+      eventJson.date = event[0].date.toISOString().slice(0,10);
+      res.status(200).send(eventJson)
+     })  
+     .catch((err)=>{
+    console.log(err)
+    res.status(500).send('server error while retreiving event details')
+     })
+    
+})
+
+
+
+
 
 
 port = process.env.PORT || 5000;
