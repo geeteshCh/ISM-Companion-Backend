@@ -131,9 +131,7 @@ app.get("/getClubs", (req,res)=>
  })
  .catch((err)=>{
   console.log(err)
- })
-
-  
+ })  
 })
 
 // get Club Details by id
@@ -179,8 +177,6 @@ app.post("/addClub",function(req,res)
     //const {id} = req.params;
     data = req.body;
     //console.log(data)
-  
-  
   console.log(req.body.name)
     Club.replaceOne({_id:data._id},req.body)
     .catch((err)=>{
@@ -193,3 +189,77 @@ app.listen(port, function() {
   console.log(`Server started on port ${port}`);
 });
 
+const eventSchema=new mongoose.Schema({
+
+  name: {
+      type: String,
+      required: true,
+      unique: true
+  },
+  tagline : String,
+  description: String,
+  club : String,
+  date : Date,
+  time : String,
+  venue : String ,
+  coordinates : String,
+  eligibility : String,
+  team : [{
+      name : String,
+      designation : String,
+      email : String,
+      contact : String,
+      imgUrl : String
+  }],
+  registeredMembers: [{
+    name : String,
+    email : String 
+  }]
+
+});
+const Event = mongoose.model("Event",eventSchema); // Event Collection
+
+Takshak = new Event({
+    name: 'Takshak',
+    tagline: 'From Thoughts To Reality',
+    description: `From thought to reality... TAKSHAK is a Sanskrit name taken from Hindu Mythology which carries a meaning associated with managing, creating, or maintaining anything.It hence is a fitting name for a robotics fest as all these aspects along with its interdisciplinary nature are what make Robotics one of the most challenging fields of study. TAKSHAK is East India's largest robotics fest organized by Robotronics - The Robotics and Al Club of IIT ISM Dhanbad.`,
+    coordinates: '12.46.0.98.420',
+    club : "64310fcc473b537b4928f28a",
+    date : "2023-04-08",
+    time : "06:00PM",
+    venue : "SAC 1rd Floor",
+    eligibility : "Must be an Undergrad",
+    team: [{name:'Vishwa', designation:'coordinator', email:'manisandeept7@gmail.com',contact : '1234567890',imgUrl: 'https://www.analyticsinsight.net/wp-content/uploads/2021/12/The-Future-of-Robotics-Its-Implications-in-2021-and-Beyond.jpg'},{name:'Geetesh', designation:'member', contact:'9347817236',email :'geetesh@gmail.com',imgUrl : 'https://www.analyticsinsight.net/wp-content/uploads/2021/12/The-Future-of-Robotics-Its-Implications-in-2021-and-Beyond.jpg'}],
+    registeredMembers : [{name : "Mani Sandeep",email : "tmsandy07@gmail.com"}]
+  });
+  Takshak.save();
+  
+// get Club Details by id
+app.get("/getEventDetails/:id",(req,res)=>{
+  const {id} = req.params; 
+    Event.find({_id:id})
+    .then((event)=>{
+      let eventJson = event[0].toJSON();
+      eventJson.date = event[0].date.toISOString().slice(0,10);
+      res.send(eventJson)
+     })  
+     .catch((err)=>{
+    console.log(err)
+     })
+    
+})
+
+app.get("/getEvents", (req,res)=>
+{
+  Event.find().select(['name','tagline','venue','coordinates','date','time','club'])
+ .then((events)=>{
+  let eventsJson = events.toJSON();
+  for(i=0;i<eventsJson.length;i++){
+    eventsJson[i].date = events[i].date.toISOString().slice(0,10);
+  }
+  res.send(events)
+ })
+ .catch((err)=>{
+  console.log(err)
+ })  
+})
