@@ -205,10 +205,9 @@ app.post("/addClub",function(req,res)
     })
   })
 
-port = process.env.PORT || 5000;
-app.listen(port, function() {
-  console.log(`Server started on port ${port}`);
-});
+
+
+// EVENTS -----------------------------------------------------------------------------------------------------
 
 const eventSchema=new mongoose.Schema({
 
@@ -253,7 +252,7 @@ Takshak = new Event({
     team: [{name:'Vishwa', designation:'coordinator', email:'manisandeept7@gmail.com',contact : '1234567890',imgUrl: 'https://www.analyticsinsight.net/wp-content/uploads/2021/12/The-Future-of-Robotics-Its-Implications-in-2021-and-Beyond.jpg'},{name:'Geetesh', designation:'member', contact:'9347817236',email :'geetesh@gmail.com',imgUrl : 'https://www.analyticsinsight.net/wp-content/uploads/2021/12/The-Future-of-Robotics-Its-Implications-in-2021-and-Beyond.jpg'}],
     registeredMembers : [{name : "Mani Sandeep",email : "tmsandy07@gmail.com"}]
   });
-  Takshak.save();
+  //Takshak.save();
   
 // get Club Details by id
 app.get("/getEventDetails/:id",(req,res)=>{
@@ -273,14 +272,22 @@ app.get("/getEventDetails/:id",(req,res)=>{
 app.get("/getEvents", (req,res)=>
 {
   Event.find().select(['name','tagline','venue','coordinates','date','time','club'])
- .then((events)=>{
-  let eventsJson = events.toJSON();
-  for(i=0;i<eventsJson.length;i++){
-    eventsJson[i].date = events[i].date.toISOString().slice(0,10);
-  }
-  res.send(events)
+ .then((eventts)=>{
+  // let eventsJson = eventTs.toJSON();
+  // for(i=0;i<eventsJson.length;i++){
+  //   eventsJson[i].date = eventTs[i].date.toISOString().slice(0,10);
+  // }
+  res.send(eventts)
  })
  .catch((err)=>{
   console.log(err)
- })  
 })
+})
+
+
+
+
+port = process.env.PORT || 5000;
+app.listen(port, function() {
+  console.log(`Server started on port ${port}`);
+});
