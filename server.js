@@ -22,6 +22,7 @@ const clubSchema=new mongoose.Schema({
   tagline: {
       type: String
   },
+  description: String,
   imgUrl: String,
   coordinates : String,
   links : {
@@ -31,6 +32,13 @@ const clubSchema=new mongoose.Schema({
       youtube : String 
   },
   office : String,
+  inductionStatus: Boolean,
+  inductionProcess: [{
+    stepTitle: String,
+    stepDescription: String,
+    date: Date,
+    time: String
+  }],
   members: [{
       name : String,
       designation : String,
@@ -55,12 +63,30 @@ roboism = new Club({
 
 });
 
+swimming = new Club({
+  name: 'Swimming Club',
+  tagline: 'Self Explanatory lol',
+  description: `Blue Lagoon SWIM 'N' GYM serves the greater Dhanbad, JH. Their pool is always clean and well-maintained. Their trainers behave friendly with their swimmers. Blue Lagoon SWIM 'N' GYM is a nice place for relaxing swim and is also great for learning professional swimming. Their trainers always give professional training to their swimmers at affordable prices. They clean the pool water regularly. Their pool is also an excellent place for beginners who want to learn to swim. Blue Lagoon SWIM 'N' GYM also offer Yoga, Gymnasium to their customers.`,
+  imgUrl: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FSwimming&psig=AOvVaw0ViiHLq4LoYEgWcWHO1fi2&ust=1681000872532000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCMDHtrGGmf4CFQAAAAAdAAAAABAE',
+  coordinates: '12.46.0.98.3',
+  links: {
+    facebook: 'https://www.facebook.com',
+    instagram: 'https://www.instagram.com'
+  },
+  inductionStatus: true,
+  inductionProcess: [{stepTitle:'long swim',stepDescription:'should swim 200m freestyle',date:'2023-04-09',time:'6:00 PM'}, {stepTitle:'butterfly',stepDescription:'should swim 100m butterfly',date:'2023-04-10',time:'7:00 PM'}],
+  office: 'Swimming Pool, SAC',
+  members: [{name:'Priyatam', designation:'pool cleaner', contact:'9277817236'},{name:'Geetesh', designation:'member', contact:'9347817236'}]
+
+});
+
 //artfreaks.save();
 //roboism.save();
+swimming.save()
 
 app.get("/getClubs", (req,res)=>
 {
- Club.find().select(['name','tagline','imgURL'])
+ Club.find().select(['name','tagline','imgUrl'])
  .then((clubs)=>{
   res.send(clubs)
  })
