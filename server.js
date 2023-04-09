@@ -218,6 +218,84 @@ app.get("/getEvents", (req,res)=>
 })
 })
 
+// get Live Events 
+app.get("/getLiveEvents", (req,res)=>
+{
+  let currentDate = new Date().toJSON().slice(0, 10);
+  Event.find().select(['name','tagline','venue','coordinates','coordinateNorth','coordinateEast','date','time','club','clubName'])
+ .then((eventts)=>{
+  let eventsJson = [],liveEvents=[];
+  for(let i=0;i<eventts.length;i++){
+    eventsJson.push(eventts[i].toJSON())
+  }
+  for(let i=0;i<eventsJson.length;i++){
+    eventsJson[i].date = eventts[i].date.toISOString().slice(0,10);
+    if(eventsJson[i].date === currentDate)
+    {
+        liveEvents.push(eventsJson[i]);
+    } 
+
+  }
+  res.status(200).send(liveEvents)
+ })
+ .catch((err)=>{
+  console.log(err)
+  res.status(500).send('server error while retrieving events')
+})
+})
+
+// get Past Events 
+app.get("/getPastEvents", (req,res)=>
+{
+  let currentDate = new Date().toJSON().slice(0, 10);
+  Event.find().select(['name','tagline','venue','coordinates','coordinateNorth','coordinateEast','date','time','club','clubName'])
+ .then((eventts)=>{
+  let eventsJson = [],liveEvents=[];
+  for(let i=0;i<eventts.length;i++){
+    eventsJson.push(eventts[i].toJSON())
+  }
+  for(let i=0;i<eventsJson.length;i++){
+    eventsJson[i].date = eventts[i].date.toISOString().slice(0,10);
+    if(eventsJson[i].date < currentDate)
+    {
+        liveEvents.push(eventsJson[i]);
+    } 
+
+  }
+  res.status(200).send(liveEvents)
+ })
+ .catch((err)=>{
+  console.log(err)
+  res.status(500).send('server error while retrieving events')
+})
+})
+
+// get Future Events 
+app.get("/getFutureEvents", (req,res)=>
+{
+  let currentDate = new Date().toJSON().slice(0, 10);
+  Event.find().select(['name','tagline','venue','coordinates','coordinateNorth','coordinateEast','date','time','club','clubName'])
+ .then((eventts)=>{
+  let eventsJson = [],liveEvents=[];
+  for(let i=0;i<eventts.length;i++){
+    eventsJson.push(eventts[i].toJSON())
+  }
+  for(let i=0;i<eventsJson.length;i++){
+    eventsJson[i].date = eventts[i].date.toISOString().slice(0,10);
+    if(eventsJson[i].date > currentDate)
+    {
+        liveEvents.push(eventsJson[i]);
+    } 
+
+  }
+  res.status(200).send(liveEvents)
+ })
+ .catch((err)=>{
+  console.log(err)
+  res.status(500).send('server error while retrieving events')
+})
+})
+
 // get Club Details by id
 app.get("/getEventDetails/:id",(req,res)=>{
   const {id} = req.params; 
