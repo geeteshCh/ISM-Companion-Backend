@@ -418,7 +418,7 @@ app.post('/login',(req,res)=>{
       if(foundUser){
         bcrypt.compare(user.password, foundUser.password, function(err, response){
           if(response){
-            res.status(200).send('User logged in')
+            res.status(200).send({username:foundUser.username, email:foundUser.email,clubIds:foundUser.clubIds})
           }else{
             res.status(401).send('Wrong Password')
           }
