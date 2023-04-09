@@ -284,7 +284,7 @@ app.get("/getClubEvents/:id", (req,res)=>
 
 // for club dropdown memu
 app.get("/getClubEnums",(req,res) => {
-    Event.find().select(['clubName','club'])
+    Club.find().select(['name','_id'])
     .then((events) =>{
       res.status(200).send(events);
     })
