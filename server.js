@@ -282,6 +282,18 @@ app.get("/getClubEvents/:id", (req,res)=>
 })
 })
 
+// for club dropdown memu
+app.get("/getClubEnums",(req,res) => {
+    Event.find().select(['clubName','club'])
+    .then((events) =>{
+      res.status(200).send(events);
+    })
+    .catch((err)=>{
+      console.log(err)
+      res.status(500).send('server error while retrieving Club enums')
+    })
+    
+})
 
 
 port = process.env.PORT || 5000;
