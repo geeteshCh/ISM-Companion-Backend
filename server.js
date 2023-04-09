@@ -248,9 +248,9 @@ app.post('/addEvent',(req,res)=>{
 
 // edit Event Details 
 app.put('/editEvent/:id',(req,res)=>{
-  data = req.body;
+  data = req.params;
   console.log(req.body.name)
-  Event.replaceOne({_id:data._id},req.body)
+  Event.replaceOne({_id:data.id},req.body)
   .then((response)=>{
     console.log(response);
     res.status(200).send({msg:"ok"})
