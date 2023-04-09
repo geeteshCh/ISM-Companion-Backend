@@ -178,6 +178,8 @@ const eventSchema=new mongoose.Schema({
   time : String,
   venue : String ,
   coordinates : String,
+  cordinateNorth : String,
+  cordinateEast : String,
   eligibility : String,
   team : [{
       name : String,
@@ -199,7 +201,7 @@ const Event = mongoose.model("Event",eventSchema); // Event Collection
 // get All Events 
 app.get("/getEvents", (req,res)=>
 {
-  Event.find().select(['name','tagline','venue','coordinates','date','time','club','clubName'])
+  Event.find().select(['name','tagline','venue','coordinates','coordinateNorth','coordinateEast','date','time','club','clubName'])
  .then((eventts)=>{
   let eventsJson = [];
   for(let i=0;i<eventts.length;i++){
