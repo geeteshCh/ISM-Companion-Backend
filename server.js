@@ -4,6 +4,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 //const dotenv = require("dotenv")
 
 const app = express();
@@ -16,12 +18,14 @@ mongoose.connect("mongodb+srv://geeteshCh:chr0nometer@giantbear.zhoxbpj.mongodb.
 
 // Member Schema
 const userSchema = new mongoose.Schema({
+  username: String,
+
   email : 
   {
     type : String,
     required : true
   },
-  name : String,
+  password: String,
   clubIds: [String]
 });
 const  User = mongoose.model("User",userSchema); // admin 
@@ -304,27 +308,48 @@ app.listen(port, function() {
 
 // OTHER ROUTES -----------------------------------------------------------------------------------------------------
 
-app.post('/login',(req,res)=>{
-    user = req.body;
-    
+app.post('/register',(req,res)=>{
+  user = req.body;
+
+
+  bcrypt.hash(user.password,saltRounds,function(err,hash){
     User.find({email : user.email}).then((foundUser) =>{
       if(foundUser.length == 0){
         const newUser=new User({
             email : user.email,
-            name: user.name
+            username: user.username,
+            password: hash
         })
         newUser.save();
         res.status(200).send('new user added')
       }else{
-        if(!foundUser[0].name){
-          User.updateOne({_id: foundUser[0]._id},{name: user.name}).then(()=>{res.status(200).send('User name updated')})
-          .catch((err)=>{console.log(err); res.status(500).send('Unable to update user name')})
-        }else{
-          res.status(200).send('existing user logged in')
-        }
+          res.status(401).json({msg:'user already exists'})
+      }
+    })
+    .catch((err)=>{
+            console.log(err);
+            res.status(500).send('unable to find user')
+      })
+  })
+})
+
+app.post('/login',(req,res)=>{
+    user = req.body;
+    
+    User.findOne({email : user.email}).then((foundUser) =>{
+      if(foundUser){
+        bcrypt.compare(user.password, foundUser.password, function(err, response){
+          if(response){
+            res.status(200).send('User logged in')
+          }else{
+            res.status(401).send('Wrong Password')
+          }
+        })
+      }else{
+        res.status(401).send('email does not exist')
        }
     })
-      .catch((err)=>{
+    .catch((err)=>{
             console.log(err);
             res.status(500).send('unable to find user')
       })
